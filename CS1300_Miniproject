@@ -1,0 +1,105 @@
+
+
+"""
+Student Grade Tracker
+CS 1300 — Lecture 5 Mini-Project
+A modular, well-tested program that collects exam scores,
+calculates a letter grade and academic standing, and
+displays a formatted report."""
+
+def get_student_name():
+    """Prompts for and returns student name."""
+    return input("Enter student name: ")
+
+def is_valid_score(score):
+    """Helper: validates if a score is between 0 and 100."""
+    return 0 <= score <= 100
+
+def get_validated_score(prompt):
+    """Helper: retry loop for score entry."""
+    while True:
+        try:
+            score = float(input(prompt))
+            if is_valid_score(score):
+                return score
+            print("Invalid score. Please enter a value between 0 and 100.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+def get_exam_scores():
+    "Collects 3 exam scores from the user with validation."
+    scores = []
+    for i in range(1, 4):
+        score = get_validated_score(f"Enter score for Exam {i}: ")
+        scores.append(score)
+    return scores
+
+def calculate_average(scores):
+    """Computes the mean of a scores list."""
+    if not scores:
+        return 0.0
+    return sum(scores) / len(scores)
+
+def determine_letter_grade(average):
+    """Maps average to a letter grade."""
+    if average >= 90: return 'A'
+    if average >= 80: return 'B'
+    if average >= 70: return 'C'
+    if average >= 60: return 'D'
+    return 'F'
+
+def determine_standing(average):
+    """Maps average to academic standing."""
+    if average >= 90: return "Honors"
+    if average >= 70: return "Satisfactory"
+    return "Academic Warning"
+
+def print_divider():
+    """Helper: prints a decorative line."""
+    print("-" * 30)
+
+def display_report(name, scores, average, letter, standing):
+    """Prints the formatted grade report."""
+    print_divider()
+    print(f"GRADE REPORT: {name}")
+    print_divider()
+    print(f"Scores: {scores}")
+    print(f"Average: {average:.2f}")
+    print(f"Letter Grade: {letter}")
+    print(f"Standing: {standing}")
+    print_divider()
+
+def test_grade_tracker():
+    """Tests calculation functions using Arrange-Act-Assert."""
+    print("Running unit tests...")
+
+   
+    scores = [80, 90, 100] 
+    avg = calculate_average(scores)  
+    assert avg == 90.0  
+
+  
+    assert determine_letter_grade(89.9) == 'B'
+    assert determine_letter_grade(90) == 'A'
+
+  
+    assert determine_standing(0) == "Academic Warning"
+    
+    print("All tests passed!")
+
+def main():
+    """Orchestrates the full program."""
+   
+    test_grade_tracker()
+    print_divider()
+    
+    name = get_student_name()
+    scores = get_exam_scores()
+    avg = calculate_average(scores)
+    letter = determine_letter_grade(avg)
+    standing = determine_standing(avg)
+    
+    display_report(name, scores, avg, letter, standing)
+
+if __name__ == "__main__":
+    main()
